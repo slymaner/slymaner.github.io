@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Intro to MapView - Create a 2D map</title>
+<style>
+  html, body, #viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 400px;
+    width: 100%;
+  }
+</style>
+
+
+ <style>
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 100%;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+	
+<link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4-src.js"></script>
+
+
+
+<script>
+
+var map, infoWindow, myLatlng;
+
+function initMap() {
+
+  var myLatlng = {lat: 39.75, lng: 30.6};
+
+  map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 10, center: myLatlng});
+
+  infoWindow = new google.maps.InfoWindow;
+  
+  
+  <!-- marker = new google.maps.Marker({ -->
+        <!-- position: myLatlng, -->
+        <!-- map: map, -->
+        <!-- title: "My Marker", -->
+        <!-- animation: google.maps.Animation.DROP }); -->
+	
+	<!-- google.maps.event.addListener(marker, 'click', function() { -->
+        <!-- infoWindow.open(map, marker); -->
+    <!-- }); -->
+  
+   
+    //infoWindow.open(map, marker);
+
+  var clickHandler = new ClickEventHandler(map, origin);
+}
+
+// Try HTML5 geolocation.
+        
+	  
+		
+
+	var watchId = navigator.geolocation.watchPosition(function(position) 
+	{ 
+	  //console.log('konumummm: ' + position.coords.longitude + ' - '+ position.coords.latitude);
+	  document.getElementById('p_long').innerHTML = position.coords.longitude;
+	  document.getElementById('p_lat').innerHTML = position.coords.latitude;
+	  });
+
+
+	  
+	 
+
+var ClickEventHandler = function(map, origin) {
+        this.origin = origin;
+        this.map = map;
+        this.infowindow = new google.maps.InfoWindow;
+        this.infowindowContent = document.getElementById('infowindow-content');
+        this.infowindow.setContent(this.infowindowContent);
+
+        // Listen for clicks on the map.
+        this.map.addListener('click', this.handleClick.bind(this));
+      };
+
+	var xx;
+	var yy;
+	
+      ClickEventHandler.prototype.handleClick = function(event) {
+        console.log('You clicked on: ' + event.latLng);
+		xx=event.latLng.lng();
+	    yy=event.latLng.lat();
+		
+		var firstProjection = 'GEOGCS["WGS 84", DATUM["WGS_1984", SPHEROID["WGS 84",6378137,298.257223563, AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]], UNIT["degree",0.01745329251994328, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4326"]]' 
+		//var secondProjection = 'PROJCS["ED50 / TM30",GEOGCS["ED50",DATUM["European_Datum_1950", SPHEROID["International 1924",6378388,297, AUTHORITY["EPSG","7022"]], AUTHORITY["EPSG","6230"]], PRIMEM["Greenwich",0, AUTHORITY["EPSG","8901"]], UNIT["degree",0.01745329251994328, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4230"]], UNIT["metre",1, AUTHORITY["EPSG","9001"]], PROJECTION["Transverse_Mercator"], PARAMETER["latitude_of_origin",0],	PARAMETER["central_meridian",30], PARAMETER["scale_factor",1], PARAMETER["false_easting",500000], PARAMETER["false_northing",0],AUTHORITY["EPSG","2320"],AXIS["Y",EAST],AXIS["X",NORTH]]'
+		//var secondProjection= 'PROJCS["ED50 / TM30",GEOGCS["ED50",DATUM["European_Datum_1950", SPHEROID["International 1924",6378388,297]], PRIMEM["Greenwich",0], UNIT["degree",0.0174532925199433]], UNIT["meter",1], PROJECTION["Transverse_Mercator"],      PARAMETER["latitude_of_origin",0], PARAMETER["central_meridian",30], PARAMETER["scale_factor",1], PARAMETER["false_easting",500000], PARAMETER["false_northing",0]]'
+		//var secondProjection='PROJCS["ED50 / TM30",GEOGCS["ED50", DATUM["European_Datum_1950", SPHEROID["International 1924",6378388,297]], PRIMEM["Greenwich",0], UNIT["degree",0.01745329251994328]], UNIT["metre",1, AUTHORITY["EPSG","9001"]], PROJECTION["Transverse_Mercator"], PARAMETER["latitude_of_origin",0], PARAMETER["central_meridian",30], PARAMETER["scale_factor",1], PARAMETER["false_easting",500000], PARAMETER["false_northing",0], AXIS["Y",EAST], AXIS["X",NORTH]]'
+		var secondProjection='PROJCS["ED50 / TM30",GEOGCS["ED50",DATUM["European_Datum_1950",SPHEROID["International 1924",6378388,297,AUTHORITY["EPSG","7022"]],TOWGS84[-87,-98,-121,0,0,0,0],AUTHORITY["EPSG","6230"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4230"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",30],PARAMETER["scale_factor",1],PARAMETER["false_easting",499993.57],PARAMETER["false_northing",7.04],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AUTHORITY["EPSG","2320"]]'; 
+		//var firstProjection = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+		
+		
+		//var firstProjection='PROJCS["ED_1950_TM30",GEOGCS["GCS_European_1950",DATUM["D_European_1950",SPHEROID["International_1924",6378388.0,297.0]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Gauss_Kruger"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",30.0],PARAMETER["Scale_Factor",1.0],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]'
+		//var secondProjection = '+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +units=m +no_defs'
+		var sonPoint= proj4(firstProjection,secondProjection,[xx,yy]);		
+		console.log('koordinat: ' + sonPoint);
+		
+      };
+
+  
+</script>
+
+
+
+</head>
+<body>
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrCoKt70li3oCYj83CFy3-xGMJPjWsIEc&callback=initMap">
+</script>
+  <div id="map"></div>
+ 
+  <p id="p_long"></p>
+  <p id="p_lat"></p>
+  
+  <select>
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+  </select>
+
+  <button type="button">Click Me!</button>
+
+  <p id="koords"></p>
+</body>
+</html>
