@@ -65,7 +65,8 @@ function initMap() {
 
 	var watchId = navigator.geolocation.watchPosition(function(position) 
 	{ 
-	  document.getElementById('p_long').innerHTML = position.coords.longitude +'  ' +position.coords.latitude ;
+	  document.getElementById('p_long').innerHTML = position.coords.longitude;
+	   document.getElementById('p_lat').innerHTML = position.coords.latitude ;
 	 
 	  
 		
@@ -76,7 +77,8 @@ function initMap() {
 		
 		var converted= proj4(firstProjection,secondProjection,[position.coords.longitude,position.coords.latitude]);		
 		
-		document.getElementById('p_x').innerHTML = converted;
+		document.getElementById('p_x').innerHTML = converted[0];
+		document.getElementById('p_y').innerHTML = converted[1];
 
 		
 	  });
