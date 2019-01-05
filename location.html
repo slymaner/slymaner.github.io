@@ -65,9 +65,20 @@ function initMap() {
 
 	var watchId = navigator.geolocation.watchPosition(function(position) 
 	{ 
-	  //console.log('konumummm: ' + position.coords.longitude + ' - '+ position.coords.latitude);
-	  document.getElementById('p_long').innerHTML = position.coords.longitude;
-	  document.getElementById('p_lat').innerHTML = position.coords.latitude;
+	  document.getElementById('p_long').innerHTML = position.coords.longitude +'  ' +position.coords.latitude ;
+	 
+	  
+		
+		var firstProjection = 'GEOGCS["WGS 84", DATUM["WGS_1984", SPHEROID["WGS 84",6378137,298.257223563, AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]], UNIT["degree",0.01745329251994328, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4326"]]' 
+		
+		var secondProjection='PROJCS["ED50 / TM30",GEOGCS["ED50",DATUM["European_Datum_1950",SPHEROID["International 1924",6378388,297,AUTHORITY["EPSG","7022"]],TOWGS84[-87,-98,-121,0,0,0,0],AUTHORITY["EPSG","6230"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4230"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",30],PARAMETER["scale_factor",1],PARAMETER["false_easting",499993.57],PARAMETER["false_northing",7.04],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AUTHORITY["EPSG","2320"]]'; 
+	
+		
+		var converted= proj4(firstProjection,secondProjection,[position.coords.longitude,position.coords.latitude]);		
+		
+		document.getElementById('p_x').innerHTML = converted;
+
+		
 	  });
 
 
@@ -123,15 +134,17 @@ var ClickEventHandler = function(map, origin) {
  
   <p id="p_long"></p>
   <p id="p_lat"></p>
+   <p id="p_x"></p>
+  <p id="p_y"></p>
   
-  <select>
+<!--   <select>
   <option value="volvo">Volvo</option>
   <option value="saab">Saab</option>
   <option value="mercedes">Mercedes</option>
   <option value="audi">Audi</option>
   </select>
 
-  <button type="button">Click Me!</button>
+  <button type="button">Click Me!</button> -->
 
   <p id="koords"></p>
 </body>
